@@ -14,8 +14,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Your AWS keys (replace with your actual keys)
-AWS_ACCESS_KEY_ID = 'aws_accesskey'
-AWS_SECRET_ACCESS_KEY = "secret key"
+AWS_ACCESS_KEY_ID = 'access key'
+AWS_SECRET_ACCESS_KEY = "secrete key"
 
 def extractdata_intos3(symbol, interval):
     client = Client(os.getenv("API_KEY"), os.getenv("SECRET_KEY"))
@@ -112,26 +112,7 @@ with dag:
         python_callable=transformdata_andloadtos3,
     )
 
-    checkavailability_of_file_ins3_task = S3KeySensor(
-        task_id='is_file_in_s3_available',
-        bucket_key='refined_cryptodata.csv',
-        bucket_name='transformedcryptodatabucket',
-        aws_conn_id='aws_s3_conn',
-        wildcard_match=False,
-        timeout=90,
-        poke_interval=5,
-    )
-
-    move_datainto_redshift_task = S3ToRedshiftOperator(
-        task_id="transfer_s3_to_redshift",
-        aws_conn_id='aws_s3_conn',
-        redshift_conn_id='conn_id_redshift',
-        s3_bucket='transformedcryptodatabucket',
-        s3_key='refined_cryptodata.csv',
-        schema="PUBLIC",
-        table="bdtusd",
-        copy_options=["csv IGNOREHEADER 1"],
-    )
+   
 
 
-    extract_data_intos3_task >> transform_data_and_load_tos3_task >> checkavailability_of_file_ins3_task >> move_datainto_redshift_task
+    extract_data_intos3_task >> transform_data_and_load_tos3_task
