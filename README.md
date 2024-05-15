@@ -1,4 +1,4 @@
-# Binance Data Pipeline
+# Binance Data Pipeline(Kline Data)
 
 This project is a data pipeline for fetching trade data from Binance API, persisting it in an S3 bucket, and loading it into Redshift and RDS databases. 
 
