@@ -2,6 +2,11 @@
 
 This project is a data pipeline for fetching trade data from Binance API, persisting it in an S3 bucket, and loading it into Redshift and RDS databases. 
 
+### Description of Kline Data
+
+
+
+
 ## Overview
 
 The pipeline consists of the following steps:
