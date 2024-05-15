@@ -5,6 +5,10 @@ This project is a data pipeline for fetching trade data from Binance API, persis
 ### Description of Kline Data
 Kline data, also known as candlestick data, provides a summarized view of trading activity for a specific trading pair within a given time frame. Each data point, represented by a candlestick, includes information about the opening price, closing price, highest price, lowest price, and trading volume during that period.
 
+#### Contents of Kline Data
+
+
+
 
 
 
