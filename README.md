@@ -1,6 +1,7 @@
 # Binance Data Pipeline(Kline Data)
 
-This project is a data pipeline for fetching trade data from Binance API, persisting it in an S3 bucket, and loading it into Redshift and RDS databases. 
+Welcome to our Trade Data Pipeline, a powerful solution for fetching, storing, and analyzing trade data from the Binance API. 
+At the heart of this pipeline lies the intricate tapestry of trade data, each thread representing a unique trade executed on the exchange
 
 ### Description of Kline Data
 Kline data, also known as candlestick data, provides a summarized view of trading activity for a specific trading pair within a given time frame. Each data point, represented by a candlestick, includes information about the opening price, closing price, highest price, lowest price, and trading volume during that period.
