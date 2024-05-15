@@ -8,6 +8,9 @@ Kline data, also known as candlestick data, provides a summarized view of tradin
 #### Contents of Kline Data
 The Kline data includes the following fields:
 - **open_time**: Timestamp for the start of the candlestick period.
+- **open**: Opening price of the asset.
+- **high**: Highest price of the asset during the period.
+- **low**: Lowest price of the asset during the period.
 
 
 
