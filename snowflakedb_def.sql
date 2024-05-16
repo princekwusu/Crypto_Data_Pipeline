@@ -67,3 +67,8 @@ PATTERN = '.*refined_cryptodata.csv';
 DESC PIPE cryptodb.snowpipe.refineddatapipe;
 
 TRUNCATE TABLE cryptodb.cryptoschema.btcusd;
+
+
+
+
+
