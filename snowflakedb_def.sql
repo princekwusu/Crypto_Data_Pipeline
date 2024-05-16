@@ -52,7 +52,7 @@ list @cryptodb.external_stage.crypto_ext_stage;
 
 CREATE OR REPLACE SCHEMA cryptodb.snowpipe;
 
---Create Pipe for market two data
+
 CREATE OR REPLACE PIPE cryptodb.snowpipe.refineddatapipe
 AUTO_INGEST = TRUE
 AS
