@@ -1,7 +1,5 @@
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
-from airflow.providers.amazon.aws.sensors.s3 import S3KeySensor
-from airflow.providers.amazon.aws.transfers.s3_to_redshift import S3ToRedshiftOperator
 from datetime import datetime, timedelta
 import boto3
 import pandas as pd
@@ -14,8 +12,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Your AWS keys (replace with your actual keys)
-AWS_ACCESS_KEY_ID = 'access key'
-AWS_SECRET_ACCESS_KEY = "secrete key"
+AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
 
 def extractdata_intos3(symbol, interval):
     client = Client(os.getenv("API_KEY"), os.getenv("SECRET_KEY"))
@@ -71,12 +69,30 @@ def transformdata_andloadtos3():
     )
     
     obj = s3.get_object(Bucket=s3_raw_bucket_name, Key='BTCUSDT_1h.csv')
-    cryptodata = pd.read_csv(BytesIO(obj['Body'].read()))
-    cryptodata = cryptodata.drop(columns=['order_book'])
+    btcusdt = pd.read_csv(BytesIO(obj['Body'].read()))
+    
+    btcusdt.drop(columns=['ignore', 'order_book'], inplace=True)
+    btcusdt['open_time'] = pd.to_datetime(btcusdt['open_time'], unit='ms')
+    btcusdt['close_time'] = pd.to_datetime(btcusdt['close_time'], unit='ms')
+    btcusdt.set_index('open_time', inplace=True)
+    btcusdt_resampled = btcusdt.resample('D').agg({
+        'open': 'first',
+        'high': 'max',
+        'low': 'min',
+        'close': 'last',
+        'volume': 'sum',
+        'quote_asset_volume': 'sum',
+        'num_trades': 'sum',
+        'taker_base_vol': 'sum',
+        'taker_quote_vol': 'sum',
+    }).reset_index()
+    btcusdt_resampled['price_diff'] = btcusdt_resampled['high'] - btcusdt_resampled['low']
+    btcusdt_resampled['price_change'] = btcusdt_resampled['close'] - btcusdt_resampled['open']
+    
     
     # Upload transformed data to S3
     with BytesIO() as f:
-        cryptodata.to_csv(f, index=False)
+        btcusdt_resampled.to_csv(f, index=False)
         f.seek(0)
         s3.upload_fileobj(f, s3_transformed_bucket_name, 'refined_cryptodata.csv')
 
@@ -112,7 +128,8 @@ with dag:
         python_callable=transformdata_andloadtos3,
     )
 
-   
+    
 
 
-    extract_data_intos3_task >> transform_data_and_load_tos3_task
+
+    extract_data_intos3_task >> transform_data_and_load_tos3_task 
