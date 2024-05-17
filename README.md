@@ -1,4 +1,4 @@
-# Binance Data Pipeline(Kline Data)
+# Crpto Data Pipeline(Kline Data)
 
 Welcome to our Trade Data Pipeline, a powerful solution for fetching, storing, and analyzing trade data from the Binance API. 
 At the heart of this pipeline lies the intricate tapestry of trade data, each thread representing a unique trade executed on the exchange
@@ -146,7 +146,7 @@ Before running the pipeline, ensure you have the following:
 
 8. Verify data ingestion in Snowflake tables using SQL queries like 
    ```bash
-   SELECT * FROM cryptodb.cryptoschema.btcusd;
+   SELECT * FROM cryptodb.cryptoschema.btcusdt;
    ```
 
 
