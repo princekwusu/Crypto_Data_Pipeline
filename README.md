@@ -12,7 +12,6 @@ The Kline data includes the following fields:
 - **open**: Opening price of the asset.
 - **high**: Highest price of the asset during the period.
 - **low**: Lowest price of the asset during the period.
-
 - **close**: Closing price of the asset.
 - **volume**: Total trading volume of the asset during the period.
 - **close_time**: Timestamp for the end of the candlestick period.
@@ -44,19 +43,30 @@ By utilizing this data, users can conduct various analyses, create visualization
 
 ## Overview
 
-The pipeline consists of the following steps:
+The crypto_data_pipeline(Kline Data) streamlines the extraction, transformation, and loading of BTCUSDT data from Binance into Snowflake for analysis. The pipeline comprises the following steps:
 
-1. Fetch data from the Binance API.
-2. Persist the data in a compressed format (JSON) in an S3 bucket.
-3. Load the data from S3 into Redshift.
-4. Load the data from S3 into an RDS database.
+1. **Data Extraction**
+   - Data is extracted from Binance using the binance api.
+   - Extracted data is loaded into an  S3 bucket created to house raw data.
 
-## Prerequisites
+2. **Data Transformation:**
+   - Transformation involves data cleaning, column removal and derivation
+   - Transformed data is stored in another  S3 bucket created to house transformed data.
 
-- Python 3.x installed on your system.
-- AWS account with appropriate permissions to access S3, Redshift, and RDS.
-- Boto3 library for AWS interaction.
-- Psycopg2 library for PostgreSQL database interaction.
+3. **Loading data into Warehouse Or Snowpipe Integration:**
+   - Snowpipe is configured to monitor the transformed data file in the  S3 bucket housing the transformed data.
+   - A snowpipe is created to automatically ingest data into Snowflake tables upon arrival of the transformed data in the s3 bucket containing the raw data..
+
+
+
+## Components
+
+- **Apache Airflow**: Airflow is used to manage and schedule the ETL tasks.
+- **Snowflake Snowpipe**: Snowpipe is utilized for loading data into Snowflake from S3.
+- **Python**: Python scripts are used for data extraction, transformation, and loading.
+- **S3 Buckets**: AWS S3 buckets are used for storing both raw and transformed data.
+
+
 
 ### Pros and Cons of the Binance Data Pipeline
 
@@ -70,13 +80,13 @@ The pipeline consists of the following steps:
 
 4. **Ease of Deployment**: With clear setup instructions and minimal dependencies, deploying the pipeline on different environments is straightforward.
 
-5. **Comprehensive Data Handling**: The pipeline fetches data from Binance API, stores it in S3, and loads it into both Redshift and RDS databases, covering a wide range of data storage and processing needs.
+5. **Comprehensive Data Handling**: The pipeline fetches BTCUSDT data using  Binance API, stores it in S3, transform the data and stores it in another s3 , loads the transformed data stored in the s3 into a database in snowflake warehouse, covering a wide range of data storage and processing needs.
 
 #### Cons:
 
 1. **Complexity**: Setting up the pipeline requires configuring AWS services, managing dependencies, and understanding the flow of data between different components, which may be complex for users unfamiliar with AWS or data pipelines.
 
-2. **Cost**: Running the pipeline involves costs associated with AWS services such as S3 storage, Redshift, and RDS, which can accumulate depending on the volume of data and usage patterns.
+2. **Cost**: Running the pipeline involves costs associated with AWS services such as S3 storage and snowflake which can accumulate depending on the volume of data and usage patterns.
 
 3. **Maintenance Overhead**: Regular maintenance is required to ensure the pipeline runs smoothly, including monitoring for errors, updating dependencies, and optimizing performance.
 
@@ -89,45 +99,62 @@ By considering these pros and cons, users can make informed decisions about whet
 
 ## Setup
 
-1. Clone this repository to your local machine.
+### Prerequisites
 
-```bash
-git clone https://github.com/yourusername/binance-data-pipeline.git
-```
+Before running the pipeline, ensure you have the following:
 
-2. Install the required Python packages.
+- Docker to run airflow
+- Access to an Apache Airflow environment or container on Docker
+- AWS acount with AWS S3 credentials with permissions to read from and write to S3 buckets.
+- Snowflake account with credentials and privileges to create pipes and tables.
+- Python environment with necessary packages installed (`boto3`, `pandas`, etc.).
 
-```bash
-pip install -r requirements.txt
-```
+### Configuration
 
-3. Configure your AWS credentials. You can set them up using the AWS CLI or through environment variables.
+1. **Airflow Container Setup:**
+   - Ensure you have an Airflow environment or container configured and running.
+   - Mount the project directory containing DAG definition file into the Airflow container.
 
-```bash
-export AWS_ACCESS_KEY_ID=your-access-key
-export AWS_SECRET_ACCESS_KEY=your-secret-key
-```
+2. **AWS Configuration:**
+   - Configure aws  with  your IAM access keys and secrete keys or make sure the one configured already has permissions to access s3 buckets in your account.
+
+3. **Snowflake Configuration:**
+   - Update  Snowflake SQL script (`snowflakedb_def.sql`) with your aws accesskeys and secrete keys.
+   - Run the (`snowflakedb_def.sql`) script in Snowflake worksheet to set up the database,schema,tables and pipes.
 
 ## Usage
 
-1. Run the main Python script to execute the data pipeline.
+1. Clone the Repository and install requirement:
+   ```bash
+   git clone "https://github.com/princekwusu/Crypto_Data_Pipeline.git"
+   cd Crypto_Data_Pipeline
+   pip install -r requirements.txt 
+   ```
+2. Start the Airflow container(make sure you are in the repository directory):
+   ```bash
+   docker-compose up -d 
+   ```
+3. Access the web server at https://localhost:8080
 
-```bash
-python main.py
-```
+4. Login using the default credentials (username: airflow, password: airflow).
 
-This script will fetch the latest trade data from Binance, persist it in S3, and load it into Redshift and RDS databases.
+5. Make sure the DAG file (`crypto_data_pipeline.py`) is in the DAGs directory of your Airflow environment.
 
-## Configuration
+6. Trigger the DAG manually or set up a new schedule for automatic execution.
 
-- `main.py`: Main script to execute the data pipeline.
-- `config.py`: Configuration file containing AWS credentials, endpoint URLs, and database credentials.
-- `requirements.txt`: List of Python dependencies.
+7. Monitor the Airflow UI for task execution and check logs for any errors.
+
+8. Verify data ingestion in Snowflake tables using SQL queries like 
+   ```bash
+   SELECT * FROM cryptodb.cryptoschema.btcusd;
+   ```
+
+
 
 ## Customization
 
-- Adjust the Binance API endpoint, S3 bucket name, Redshift parameters, and RDS parameters in the `config.py` file according to your setup.
-- Modify the main script (`main.py`) if you need to change the data processing logic or add additional steps to the pipeline.
+- Adjust the Binance API endpoint, S3 bucket name,parameters according to your setup.
+- Modify the main script (`crypto_data_pipeline.py`) if you need to change the data processing logic or add additional steps to the pipeline.
 
 ## Contributing
 
@@ -138,3 +165,10 @@ Pull requests and suggestions are welcome. For major changes, please open an iss
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
+
+## GROUP MEMBERS
+1. Eugene Hayford Kwakye
+2. Edward Kuagbe
+3. Priscilla Kyeremah
+4. Prince Owusu
+5. Orlando kojo Peter
