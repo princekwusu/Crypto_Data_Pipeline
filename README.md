@@ -58,6 +58,63 @@ The crypto_data_pipeline(Kline Data) streamlines the extraction, transformation,
    - A snowpipe is created to automatically ingest data into Snowflake tables upon arrival of the transformed data in the s3 bucket containing the raw data..
 
 
+ Below is a contextual diagram to visually represent the pipeline architecture and flow of data:
+
+```plaintext
+                +---------------------+
+                |                     |
+                |   Binance API       |
+                |                     |
+                +----------+----------+
+                           |
+                           v
+                +----------+----------+
+                |                     |
+                |    Data Extraction  |
+                |                     |
+                +----------+----------+
+                           |
+                           v
+                +----------+----------+
+                |                     |
+                |  Data Transformation|
+                |                     |
+                +----------+----------+
+                           |
+                           v
+                +----------+----------+
+                |                     |
+                |    S3 Buckets       |
+                |  (Raw & Transformed)|
+                +----------+----------+
+                           |
+                           v
+                +----------+----------+
+                |                     |
+                |  Local Data Storage |
+                |     (PostgreSQL)    |
+                +----------+----------+
+                           |
+                           v
+                +----------+----------+
+                |                     |
+                |   Loading Data into |
+                |    Snowflake        |
+                |                     |
+                +---------------------+
+
+
+```
+
+In this diagram:
+
+- **Binance API**: Represents the source of trade data, from which data is extracted.
+- **Data Extraction**: Denotes the process of fetching data from the Binance API.
+- **Data Transformation**: Refers to the step where the extracted data is cleaned, processed, and transformed into a suitable format.
+- **Loading Data into Snowflake**: Represents the final step where the transformed data is loaded into Snowflake for storage and analysis.
+
+This diagram provides a visual representation of the pipeline's components and the flow of data from extraction to storage. It helps users understand the overall architecture and how each component interacts with the others.
+
 
 ## Components
 
@@ -168,7 +225,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## GROUP MEMBERS
 1. Eugene Hayford Kwakye
-2. Edward Kuagbe
+2. Edward Kuagbenu
 3. Priscilla Kyeremah
 4. Prince Owusu
 5. Orlando kojo Peter
