@@ -63,7 +63,8 @@ The crypto_data_pipeline(Kline Data) streamlines the extraction, transformation,
 ```plaintext
 +---------------------+
 |                     |
-|   Binance API       |
+|   Binance API
+    (Kline data)      |
 |                     |
 +----------+----------+
            |
@@ -91,8 +92,8 @@ The crypto_data_pipeline(Kline Data) streamlines the extraction, transformation,
            v
 +----------+----------+
 |                     |
-|   Loading Data into  |
-|    Snowflake         |
+|  Loading Data into  |
+|    Snowflake        |
 |                     |
 +---------------------+
 
