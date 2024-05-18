@@ -61,47 +61,40 @@ The crypto_data_pipeline(Kline Data) streamlines the extraction, transformation,
  Below is a contextual diagram to visually represent the pipeline architecture and flow of data:
 
 ```plaintext
-                +---------------------+
-                |                     |
-                |   Binance API       |
-                |                     |
-                +----------+----------+
-                           |
-                           v
-                +----------+----------+
-                |                     |
-                |    Data Extraction  |
-                |                     |
-                +----------+----------+
-                           |
-                           v
-                +----------+----------+
-                |                     |
-                |  Data Transformation|
-                |                     |
-                +----------+----------+
-                           |
-                           v
-                +----------+----------+
-                |                     |
-                |    S3 Buckets       |
-                |  (Raw & Transformed)|
-                +----------+----------+
-                           |
-                           v
-                +----------+----------+
-                |                     |
-                |  Local Data Storage |
-                |     (PostgreSQL)    |
-                +----------+----------+
-                           |
-                           v
-                +----------+----------+
-                |                     |
-                |   Loading Data into |
-                |    Snowflake        |
-                |                     |
-                +---------------------+
++---------------------+
+|                     |
+|   Binance API       |
+|                     |
++----------+----------+
+           |
+           v
++----------+----------+
+|                     |
+|    Data Extraction  |
+|                     |
++----------+----------+
+           |
+           v
++----------+----------+
+|                     |
+|  Data Transformation|
+|                     |
++----------+----------+
+           |
+           v
++----------+----------+
+|                     |
+|    S3 Buckets       |
+| (Raw & Transformed) |
++----------+----------+
+           |
+           v
++----------+----------+
+|                     |
+|   Loading Data into  |
+|    Snowflake         |
+|                     |
++---------------------+
 
 
 ```
