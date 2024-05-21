@@ -23,6 +23,18 @@ The Kline data includes the following fields:
 - **ignore**: Placeholder field, not used in analysis.
 - **order_book**: Data related to the order book at the time of closing the candlestick.
 
+ ### Additional Project Requirements: 
+
+* AWS Account: Set up an AWS account to access and use the required AWS services, such as Amazon S3, AWS Glue, and Amazon EC2. 
+
+* Snowflake Account: Set up a Snowflake account to access and use the Snowflake data warehouse for storing and analyzing the processed and enriched data. 
+
+* Binance API Key: Register for a Binance account and obtain an API key to access and collect the Kline data for the BTC/USDT trading pair. 
+
+* Programming Languages and Libraries: Use Python, SQL, and/or R for data processing, analysis, and model building. Utilize relevant libraries and frameworks, such as Pandas, NumPy, SciPy, Scikit-learn, and TensorFlow. 
+
+* Version Control and Collaboration: Use Git and GitHub for version control and collaboration, ensuring that all project-related code and documentation are well-organized and easily accessible. 
+
 #### Purpose of Kline Data
 
 The Kline data provides valuable insights for traders, analysts, and researchers, allowing them to:
