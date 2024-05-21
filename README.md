@@ -1,7 +1,8 @@
-# Crpto Data Pipeline(Kline Data)
+# Real-time and Historical Cryptocurrency Market Analysis and Visualization Platform for BTC/USDT using Binance Data 
 
-Welcome to our Trade Data Pipeline, a powerful solution for fetching, storing, and analyzing trade data from the Binance API. 
-At the heart of this pipeline lies the intricate tapestry of trade data, each thread representing a unique trade executed on the exchange
+## Project Overview: 
+
+This project aims to build a real-time and historical cryptocurrency market analysis and visualization platform for the BTC/USDT trading pair using Binance Kline data. The platform will enable users to explore, analyze, and gain insights into the BTC/USDT market trends and patterns. 
 
 ### Description of Kline Data
 Kline data, also known as candlestick data, provides a summarized view of trading activity for a specific trading pair within a given time frame. Each data point, represented by a candlestick, includes information about the opening price, closing price, highest price, lowest price, and trading volume during that period.
